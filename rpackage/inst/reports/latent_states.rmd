@@ -1,0 +1,256 @@
+---
+title: "Latent States"
+date: '`r Sys.Date()`'
+output: 
+  pdf_document: 
+    toc: yes
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(adapop)
+paths_to_pop_objects <- "[pop_paths]"
+pops <- adapop:::rmd_read_pops(paths_to_pop_objects)
+
+parameter_path <- "[parameter_path]"
+param_default <- c("full_period" = TRUE, 
+                   "last_election_period" = TRUE,
+                   "election_periods" = FALSE,
+                   "election_campaigns" = FALSE,
+                   "sigma" = TRUE,                   
+                   "diagnostics_table" = TRUE,
+                   "model_information" = TRUE)
+params <- adapop:::rmd_read_params(parameter_path)
+params <- adapop:::rmd_parse_parameters(params, param_default)
+
+parties <- adapop:::rmd_pops_unique_parties(pops)
+```
+
+\pagebreak
+
+# Latent states
+
+Below are the estimated latent states for the different parties.
+
+
+```{r, echo=FALSE, results='asis', fig.height=3, fig.width=15}
+if(params$full_period){
+  cat("\n## Full period\n")
+  for(i in seq_along(parties)){
+    party <- parties[i]
+    cat("\n### ", party, "\n")
+    for(j in seq_along(pops)){
+      plt <- plot(pops[[j]], 
+                  party, 
+                  latent_state_colour = adapop:::party_color(party),
+                  shift_latent_days = 6L) + 
+        geom_known_state(pops[[j]], party) + 
+        ggplot2::theme_bw()
+      if(length(pops) > 1) plt <- plt + ggplot2::ggtitle(paste0("Model ",j))
+      suppressWarnings(print(plt))
+      cat("\n")
+    }
+  }
+}
+```
+
+
+
+```{r, echo=FALSE, results='asis', fig.height=3, fig.width=9}
+if(params$last_election_period){
+  cat("## Last election period\n")
+
+  trs <- adapop:::rmd_known_state_period_time_range(pops)
+  K <- length(trs)
+  
+  for(i in seq_along(parties)){
+    party <- parties[i]
+    cat("\n### ", party, "\n")
+    for(j in seq_along(pops)){
+      cat("\n")
+      plt <- plot(pops[[j]], 
+                  party, 
+                  shift_latent_days = 6L,
+                  from = unname(trs[[K]]["from"]), 
+                  to = unname(trs[[K]]["to"]), 
+                  latent_state_colour = adapop:::party_color(party)) + 
+        geom_known_state(pops[[j]], party) + 
+        ggplot2::theme_bw()
+      tit <- paste0(lubridate::year(trs[[K]]["from"]))
+      if(length(pops) > 1) tit <- paste0(tit, ": Model ",j)
+      plt <- plt + ggplot2::ggtitle(tit)
+      suppressWarnings(print(plt))
+      cat("\n")
+    }
+    cat("\n")
+  }
+}
+
+```
+
+
+```{r, echo=FALSE, results='asis', fig.height=3, fig.width=9}
+if(params$election_periods){
+  cat("## Election periods\n")
+
+  trs <- adapop:::rmd_known_state_period_time_range(pops)
+  
+  for(i in seq_along(parties)){
+    party <- parties[i]
+    cat("\n### ", party, "\n")
+    for(k in seq_along(trs)){
+      for(j in seq_along(pops)){
+        cat("\n")
+        plt <- plot(pops[[j]], 
+                    party, 
+                    shift_latent_days = 6L,
+                    from = unname(trs[[k]]["from"]), 
+                    to = unname(trs[[k]]["to"]), 
+                    latent_state_colour = adapop:::party_color(party)) + 
+          geom_known_state(pops[[j]], party) + 
+          ggplot2::theme_bw()
+        tit <- paste0(lubridate::year(trs[[k]]["from"]), "-", lubridate::year(trs[[k]]["to"]))
+        if(length(pops) > 1) tit <- paste0(tit, ": Model ",j)
+        plt <- plt + ggplot2::ggtitle(tit)
+        suppressWarnings(print(plt))
+        cat("\n")
+      }
+      cat("\n")
+    }
+    cat("\n")
+  }
+}
+
+```
+
+
+
+
+```{r, echo=FALSE, results='asis', fig.height=3, fig.width=9}
+
+if(params$election_campaigns){
+  cat("## Election campaigns\n")
+  trs <- adapop:::rmd_known_state_campaign_time_range(pops, months = 6L)
+  
+  for(i in seq_along(parties)){
+    party <- parties[i]
+    cat("\n### ", party, "\n")
+    for(k in seq_along(trs)){
+      for(j in seq_along(pops)){
+        cat("\n")
+        plt <- plot(pops[[j]], party, 
+                    shift_latent_days = 6L,
+                    from = unname(trs[[k]]["from"]), 
+                    to = unname(trs[[k]]["to"]), 
+                    latent_state_colour = adapop:::party_color(party)) + 
+          geom_known_state(pops[[j]], party) + 
+          ggplot2::theme_bw()
+        tit <- lubridate::year(trs[[k]]["to"])
+        if(length(pops) > 1) tit <- paste0(tit, ": Model ",j)
+        plt <- plt + ggplot2::ggtitle(tit)
+        suppressWarnings(print(plt))
+        cat("\n")
+      }
+      cat("\n")
+    }
+    cat("\n")
+  }
+}
+
+```
+
+
+
+```{r, echo=FALSE, results='asis', fig.height=4, fig.width=4,fig.show="hold", out.width="50%"}
+
+if(params$sigma){
+  cat("## Sigma \n")
+  
+  for(j in seq_along(pops)){
+    pn <- parameter_names(pops[[j]])
+    cat("\n")
+    no_sigma_x <- sum(grepl(pn, pattern = "sigma_x\\["))
+    if(no_sigma_x > 1) plnsx <- pops[[j]]$y else plnsx <- "sigma_x"
+    if(no_sigma_x > 0){
+      plt <- plot_parameters_areas(pops[[j]], 
+                                   paste0("sigma_x[", 1:no_sigma_x, "]"), 
+                                   plnsx, 
+                                   area_method = "equal height")
+      tit <- "sigma_x"
+      if(length(pops) > 1) tit <- paste0(tit, ": Model ",j)
+      plt <- plt + ggplot2::ggtitle(tit)
+      suppressWarnings(print(plt))
+    }
+    cat("\n")
+  }
+}
+
+```
+
+```{r, echo=FALSE, results='asis', fig.height=4, fig.width=4,fig.show="hold", out.width="50%"}
+
+if(params$sigma){
+  for(j in seq_along(pops)){
+    pn <- parameter_names(pops[[j]])
+    cat("\n")
+    no_sigma_xc <- sum(grepl(pn, pattern = "sigma_xc\\["))
+    if(no_sigma_xc > 1) plnsx <- pops[[j]]$y else plnsx <- "sigma_xc"
+    if(no_sigma_xc > 0){
+      plt <- plot_parameters_areas(pops[[j]], 
+                                   paste0("sigma_xc[", 1:no_sigma_xc, "]"), 
+                                   plnsx, 
+                                   area_method = "equal height")
+      tit <- "sigma_xc"
+      if(length(pops) > 1) tit <- paste0(tit, ": Model ",j)
+      plt <- plt + ggplot2::ggtitle(tit)
+      suppressWarnings(print(plt))
+    }
+    cat("\n")
+  }
+}
+
+```
+
+\pagebreak
+
+# Model information
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+  
+  cat("## Model diagnostics\n")
+  knitr::kable(adapop:::rmd_model_diagnostic_table(pops), 
+               digits = 1, 
+               caption = "Model diagnostics", 
+               row.names = TRUE)
+}
+```
+
+
+
+
+```{r,results='asis', echo=FALSE}
+
+if(params$model_information){
+
+  cat("\n## Model settings\n")
+  
+  mi <- adapop:::rmd_model_settings(pops)
+  rownames(mi) <- paste("Model", mi$i)
+  rmn <- c("model_time_from", "i", "y", "model_time_to", "polls_time_from", "polls_time_to", "known_state_time_from", "known_state_time_to")
+  mi <- mi[,!colnames(mi) %in% rmn]
+  mi <- t(mi)
+  
+  knitr::kable(mi, 
+              digits = 1, 
+              caption = "Model settings", 
+              row.names = TRUE)
+}
+```
+
+```{r,results='asis', echo=FALSE}
+if(params$model_information){
+  rmd_print_model_information(pops)
+}
+```

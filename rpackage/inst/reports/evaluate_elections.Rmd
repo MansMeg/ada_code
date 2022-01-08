@@ -1,0 +1,284 @@
+---
+title: "Evaluate elections"
+date: '`r Sys.Date()`'
+output: 
+  pdf_document: 
+    toc: yes
+    number_sections: yes
+    toc_depth: 4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(adapop)
+paths_to_pop_objects <- "[pop_paths]"
+pops <- adapop:::rmd_read_pops(paths_to_pop_objects)
+
+parameter_path <- "[parameter_path]"
+param_default <- c("full_period" = FALSE, 
+                   "last_election_period" = TRUE,
+                   "election_periods" = FALSE,
+                   "election_campaigns" = FALSE,
+                   "diagnostics_table" = TRUE,
+                   "model_information" = TRUE)
+params <- adapop:::rmd_read_params(parameter_path)
+params <- adapop:::rmd_parse_parameters(params, param_default)
+
+parties <- adapop:::rmd_pops_unique_parties(pops)
+
+mi <- adapop:::rmd_model_settings_with_unique(pops)
+mi <- mi[order(mi$y, mi$polls_time_to, mi$model_setting),]
+mi$model <- mi$i
+
+mu <- adapop:::rmd_model_settings_unique(pops)
+
+```
+
+\pagebreak
+
+# Evaluation at Elections
+
+```{r,results='asis', echo=FALSE}
+
+if(params$model_information){
+  cat("\n## Model settings\n")
+  knitr::kable(mu, 
+              caption = "Model settings", 
+              row.names = FALSE)
+}
+```
+
+
+```{r, results='asis', echo=FALSE, fig.height=3, fig.width=4,fig.show="hold", out.width="50%"}
+if(params$diagnostics_table){
+    
+  cat("\n## Model calibration \n")
+  
+  per <- adapop:::rmd_last_known_state_percentile(pops)
+  per$ndraws <- NULL
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
+  model_settings <- sort(unique(per$model_setting))
+  
+  results <- data.frame(model_settings = model_settings,
+                        extreme_percentiles = rep(0, length(model_settings)))
+  
+  for(i in seq_along(model_settings)){
+    per_mod <- per[per$model_setting == model_settings[i], ]
+    per_mod$sha <- per_mod$date <- per_mod$model_setting <- per_mod$polls_time_to <- NULL
+    perc <- unlist(per_mod)
+    perc <- data.frame(percentile = perc[!is.na(perc)])
+    plt <- ggplot2::ggplot(perc, ggplot2::aes(y=, x=percentile)) + 
+      ggplot2::geom_histogram() + 
+      ggplot2::theme_bw() + 
+      ggplot2::ggtitle(paste("Model setting", model_settings[i], collapse = " "))
+    suppressWarnings(suppressMessages(print(plt)))
+    results$model_settings[i] <- model_settings[i]
+    results$extreme_percentiles[i] <- 
+      mean(perc$percentile < 0.005 | perc$percentile > 0.995)
+  }
+  
+  print(knitr::kable(results, 
+                     digits = 3, 
+                     caption = paste0("Percentiles Summary"), 
+                     row.names = FALSE))
+  
+}
+```
+
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+    
+  cat("\n## Model performance\n")
+  rmse_res <- adapop:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "rmse")
+  elpd_res <- adapop:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "elpd")
+  res <- cbind(rmse_res[,c("model_setting", "rmse")], elpd_res[,c("elpd", "n")])
+  print(knitr::kable(res, 
+                     digits = 3, 
+                     caption = paste0("Model setting performance"), 
+                     row.names = FALSE))
+}
+```
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+    
+  cat("\n## RMSE by Country\n")
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_evaluation(pops, type = "rmse")
+  per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
+  per <- per[order(per$polls_time_to, per$model_setting),]
+  
+  # Germany
+  party <- "SPD" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_germany) > 0){
+    print(knitr::kable(per_germany, 
+                       digits = 3, 
+                       caption = paste0("RMSE Germany"), 
+                       row.names = FALSE))
+  }
+  
+  # Sweden
+  party <- "M" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_swe) > 0){
+    print(knitr::kable(per_swe, 
+                       digits = 3, 
+                       caption = paste0("RMSE Sweden"), 
+                       row.names = FALSE))
+  }
+
+}
+```
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+    
+  cat("\n## ELDP by Country\n")
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_evaluation(pops, type = "elpd")
+  per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
+  per <- per[order(per$polls_time_to, per$model_setting),]
+  
+  # Germany
+  party <- "SPD" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_germany) > 0){
+    print(knitr::kable(per_germany, 
+                       digits = 3, 
+                       caption = paste0("ELDP Germany"), 
+                       row.names = FALSE))
+  }
+  
+  # Sweden
+  party <- "M" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_swe) > 0){
+    print(knitr::kable(per_swe, 
+                       digits = 3, 
+                       caption = paste0("ELDP Sweden"), 
+                       row.names = FALSE))
+  }
+
+}
+```
+
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+    
+  cat("\n## Percentiles by Country\n")
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_percentile(pops)
+  per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
+  per <- per[order(per$polls_time_to, per$model_setting),]
+  
+  # Germany
+  party <- "SPD" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_germany) > 0){
+    print(knitr::kable(per_germany, 
+                       digits = 3, 
+                       caption = paste0("Percentiles Germany"), 
+                       row.names = FALSE))
+  }
+  
+  # Sweden
+  party <- "M" 
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
+  per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
+  if(nrow(per_swe) > 0){
+    print(knitr::kable(per_swe, 
+                       digits = 3, 
+                       caption = paste0("Percentiles Sweden"), 
+                       row.names = FALSE))
+  }
+
+}
+```
+
+
+```{r, echo=FALSE, results='asis', fig.height=3, fig.width=9}
+if(params$last_election_period){
+  cat("## Election predictions \n")
+  
+  for(i in seq_along(parties)){
+    party <- parties[i]
+    cat("\n### ", party, "\n")
+    for(j in 1:nrow(mi)){
+      cat("\n")
+      pop <- pops[[mi$i[j]]]
+      if(!(party %in% pop$y)) next
+      
+      ks <- rmd_get_known_states(party)
+        
+      plt <- plot(pop, 
+                  party, 
+                  shift_latent_days = 6L,
+                  from = unname(pop$model_time_range["to"] - 150),
+                  to = unname(pop$model_time_range["to"]),
+                  latent_state_colour = adapop:::party_color(party)) + 
+        geom_known_state(ks, party) + 
+        ggplot2::theme_bw()
+      tit <- paste0("From ", mi$polls_time_to[j], ": Setting ", mi$model_setting[j], " (model ", mi$i[j], ") ")
+      plt <- plt + ggplot2::ggtitle(tit)
+      suppressWarnings(print(plt))
+      cat("\n")
+    }
+    cat("\n")
+  }
+}
+
+```
+
+\pagebreak
+
+# Model information
+
+```{r, results='asis', echo=FALSE}
+if(params$diagnostics_table){
+  
+  cat("## Model diagnostics\n")
+  tab <- adapop:::rmd_model_diagnostic_table(pops)
+  n <- 5
+  it <- ncol(tab)%/%n; rest <- ncol(tab)%%n
+  if(rest > 0) it <- it + 1L
+  for(i in 1:it){
+    if(i == it) end <- ncol(tab) else end <- i*n
+    ptab <- tab[,((i-1)*n + 1L):end, drop=FALSE]
+    print(knitr::kable(ptab, 
+                 digits = 1, 
+                 caption = paste0("Model diagnostics ", i), 
+                 row.names = TRUE))
+  }
+
+}
+```
+
+
+```{r,results='asis', echo=FALSE}
+
+if(params$model_information){
+
+  cat("\n## Model summary\n")
+  knitr::kable(mi[order(mi$model), c("model", "sha", "model_setting", "polls_time_to")], 
+               digits = 1, 
+               caption = "Model summary", 
+               row.names = FALSE)
+  
+}
+```
+
+
+```{r,results='asis', echo=FALSE}
+if(params$model_information){
+  rmd_print_model_information(pops)
+}
+```

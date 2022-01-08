@@ -1,0 +1,36 @@
+Package: adapop
+Title: Ada Poll of Polls
+Version: 0.4.0
+Authors@R: 
+    person(given = "Mans",
+           family = "Magnusson",
+           role = c("aut", "cre"),
+           email = "mons.magnusson@gmail.com")
+Description: Functionality for Ada Poll of Polls.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Depends: R (>= 3.5.0)
+Imports:
+  checkmate,
+  digest,  
+  dplyr,
+  lubridate,
+  rlang,
+  rstan,
+  tibble,  
+  yaml
+Suggests: 
+  abind,
+  bayesplot,
+  matrixStats,
+  ggplot2,
+  git2r,
+  jsonlite,  
+  knitr,
+  plyr,
+  rmarkdown,  
+  stringr,
+  testthat (>= 2.1.0),  
+  xtable
