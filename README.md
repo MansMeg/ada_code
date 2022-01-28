@@ -177,97 +177,15 @@ output <- capture.output(suppressWarnings(
 ```
 
     ## Default value(s) set:
-
     ## sigma_kappa_hyper = 0.005
-
     ## kappa_1_sigma_hyper = 0.02
-
     ## g_scale = 0.46986301369863
 
-    ## use_industry_bias = 0
-
-    ## use_house_bias = 0
-
-    ## use_design_effects = 0
-
-    ## use_constrained_party_house_bias = 0
-
-    ## use_constrained_house_house_bias = 0
-
-    ## use_constrained_party_kappa = 0
-
-    ## use_ar_kappa = 0
-
-    ## use_latent_state_version = 0
-
-    ## use_t_dist_industry_bias = 0
-
-    ## use_multivariate_version = 0
-
-    ## use_softmax = 1
-
-    ## estimate_alpha_kappa = 0
-
-    ## estimate_alpha_beta_mu = 0
-
-    ## estimate_alpha_beta_sigma = 0
-
-    ## alpha_kappa_known = 1
-
-    ## alpha_beta_mu_known = 1
-
-    ## alpha_beta_sigma_known = 1
-
-    ## beta_mu_1_sigma_hyper = 0.02
-
-    ## sigma_beta_mu_sigma_hyper = 0.01
-
-    ## beta_sigma_1_sigma_hyper = 1
-
-    ## sigma_beta_sigma_sigma_hyper = 1
-
-    ## kappa_sum_sigma_hyper = 0.01
-
-    ## beta_mu_sum_party_sigma_hyper = 0.01
-
-    ## beta_mu_sum_house_sigma_hyper = 0.01
-
-    ## estimate_kappa_next = 1
-
-    ## nu_kappa_raw_alpha = 6.5
-
-    ## nu_kappa_raw_beta = 1
-
-    ## alpha_kappa_mean = 0
-
-    ## alpha_kappa_sd = 1
-
-    ## alpha_beta_mu_mean = 0
-
-    ## alpha_beta_mu_sd = 1
-
-    ## alpha_beta_sigma_mean = 0
-
-    ## alpha_beta_sigma_sd = 1
+      ...
 
     ## nu_lkj = 1
-
     ## x1_prior_p = 0.268781302170284, 0.731218697829716
-
     ## x1_prior_alpha0 = 100
-
-    ## Registered S3 methods overwritten by 'adapop':
-    ##   method                   from
-    ##   [.latent_state           ada 
-    ##   [.polls_data             ada 
-    ##   as.data.frame.polls_data ada 
-    ##   length.polls_data        ada 
-    ##   pairs.poll_of_polls      ada 
-    ##   plot.poll_of_polls       ada 
-    ##   plot.polls_data          ada 
-    ##   print.poll_of_polls      ada 
-    ##   print.polls_data         ada 
-    ##   subset.polls_data        ada
 
 We can also extract some basic information and the results.
 
@@ -317,7 +235,7 @@ pop
     ## sha: 0bc8c0f14ea23e05ef4e65e8fdd28fa462712280 
     ## cache directory: /var/folders/8x/bgssdq5n6dx1_ydrhq1zgrym0000gn/T//RtmpV15V6A/pop_cache
 
-The stan object can be found in `pop5$stan_fit`
+The stan object can be found in `pop$stan_fit`
 
 ``` r
 head(rstan::summary(pop$stan_fit)$summary)[,1:3]
