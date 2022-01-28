@@ -30,14 +30,14 @@ The model used
 
 We continuously develop the model and improves it. The actual model we
 use is set in the
-[run\_ada/ada\_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml)
+[run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml)
 (`model` argument). The same model will exist as a stan file in the R
 package, that you can find in
 [rpackage/inst/stan\_models/](https://github.com/MansMeg/ada_code/blob/main/rpackage/inst/stan_models/).
 
 The hyperparameter settings we use are then either set in the config
 file
-([run\_ada/ada\_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml))
+([run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml))
 or as the default values. The default values are printed when running
 the model in R.
 

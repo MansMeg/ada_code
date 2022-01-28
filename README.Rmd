@@ -23,13 +23,26 @@ To run the models and (re)produce the output:
 5. Play around with the resulting model object in R.
 
 
-# The model used
+The model used
+==============
 
-We continuously develop the model and improves it. The actual model we use is set in the [run_ada/ada_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml) (``model`` argument). The same model will exist as a stan file in the R package, that you can find in [rpackage/inst/stan_models/](https://github.com/MansMeg/ada_code/blob/main/rpackage/inst/stan_models/). 
+We continuously develop the model and improves it. The actual model we
+use is set in the
+[run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml)
+(`model` argument). The same model will exist as a stan file in the R
+package, that you can find in
+[rpackage/inst/stan\_models/](https://github.com/MansMeg/ada_code/blob/main/rpackage/inst/stan_models/).
 
-The hyperparameter settings we use are then either set in the config file ([run_ada/ada_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml)) or as the default values. The default values are printed when running the model in R.
+The hyperparameter settings we use are then either set in the config
+file
+([run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml))
+or as the default values. The default values are printed when running
+the model in R.
 
-Unfortunately we do not have a better description of the model right now. We know that it can be cumbersome to read, but if you have any questions feel free to reach out on twitter or leave an issue [here](https://github.com/MansMeg/ada_code/issues) at github.
+Unfortunately we do not have a better description of the model right
+now. We know that it can be cumbersome to read, but if you have any
+questions feel free to reach out on twitter or leave an issue
+[here](https://github.com/MansMeg/ada_code/issues) at github.
 
 # R package 
 
