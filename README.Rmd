@@ -22,6 +22,7 @@ To run the models and (re)produce the output:
 4. Run either [run_ada/run_ada.R](https://github.com/MansMeg/ada_code/blob/main/run_ada/run_ada.R) in R or [run_ada/run_ad_bash.sh](https://github.com/MansMeg/ada_code/blob/main/run_ada/run_ada_bash.sh).
 5. Play around with the resulting model object in R.
 
+The whole process of 1-4. can be seen in the github action workflow [here](https://github.com/MansMeg/ada_code/actions).
 
 The model used
 ==============
