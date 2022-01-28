@@ -14,12 +14,13 @@ output:
 
 This repository contain code to run the Ada Poll of Polls model using Stan.
 
-To run the models and produce the output:
+To run the models and (re)produce the output:
 
 1. You need to have Stan and Rstan installed. To install Rstan (and Stan), see [Rstan Installation information](https://mc-stan.org/users/interfaces/rstan.html).
 2. Install the SwedishPolls R package. See [the install instructions here]().
 3. Install the ``ada`` R package (see below). 
-4. Run either 
+4. Run either [run_ada/run_ada.R]() in R or [run_ada/run_ad_bash.sh]().
+5. Play around with the resulting model object in R.
 
 
 # The model used
