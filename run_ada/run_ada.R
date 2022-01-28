@@ -125,7 +125,7 @@ pop  <- poll_of_polls(y = parties,
 # Write model output locally ----
 print("Write model output locally")
 job_id <- cfg$job_id
-rds_file_path <- file.path(file_path, paste0(pop$sha, ".rds"))
+rds_file_path <- file.path(getwd(), paste0(pop$sha, ".rds"))
 saveRDS(pop, file = rds_file_path)
 
 ## Print outputs
