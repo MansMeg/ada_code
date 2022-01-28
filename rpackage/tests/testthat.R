@@ -1,4 +1,4 @@
 library(testthat)
-library(adapop)
+library(ada)
 
-test_check("adapop")
+test_check("ada")
