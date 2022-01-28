@@ -3,6 +3,7 @@
 #' @param pop a [poll_of_polls] object with industry bias using kappa.
 #' @param y a variable name in the [poll_of_polls] object.
 #' @param t time line time point to plot
+#'
 #' @export
 plot_kappa_vs_x <- function(pop, y, t){
   checkmate::assert_class(pop, "pop_model8a")
