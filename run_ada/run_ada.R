@@ -54,16 +54,23 @@ options(mc.cores = parallel::detectCores())
 
 ## Set stan arguments
 print("Set stan arguments")
-total_posterior_draws <- 1000L
-stan_arguments <- cfg$model_arguments$stan_arguments
-if(is.null(stan_arguments)){
-  stan_arguments <- list(warmup = 1000,
-                         thin = 4,
-                         chains = 4)
-  stan_arguments$control <- list(adapt_delta = 0.95)
+if(!ada:::on_github_actions()){
+  total_posterior_draws <- 1000L
+  stan_arguments <- cfg$model_arguments$stan_arguments
+  if(is.null(stan_arguments)){
+    stan_arguments <- list(warmup = 1000,
+                           thin = 4,
+                           chains = 4)
+    stan_arguments$control <- list(adapt_delta = 0.95)
+  }
+  stan_arguments$iter <- round(stan_arguments$warmup + stan_arguments$thin * (total_posterior_draws / stan_arguments$chains))
+} else {
+  # Run test on github actions - check that the code compile and runs
+  stan_arguments <- list(warmup = 1L,
+                         thin = 1L,
+                         chains = 1L,
+                         iter = 2L)
 }
-stan_arguments$iter <- round(stan_arguments$warmup + stan_arguments$thin * (total_posterior_draws / stan_arguments$chains))
-
 
 # Setup data ----
 print("Setup data")
