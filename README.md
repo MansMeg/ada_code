@@ -5,7 +5,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-A Poll of Polls model
+The Ada model
 =====================
 
 This repository contain code to run the Ada Poll of Polls model using
