@@ -33,14 +33,14 @@ test_that("reweight and resample works", {
   expect_silent(spd1 <- simulate_polls(x = x_test[[1]], pd, npolls = 100, time_scale = "week", start_date = "2010-01-04"))
   expect_silent(ptw1 <- polls_time_weights(spd1))
 
-  expect_silent(spd2 <- adapop:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week"))
+  expect_silent(spd2 <- ada:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week"))
   expect_identical(spd1,spd2)
 
-  expect_silent(spd3 <- adapop:::reweight_and_resample(x = spd1, true_ls = x_test[[1]], time_scale = "week", weight = "keep"))
+  expect_silent(spd3 <- ada:::reweight_and_resample(x = spd1, true_ls = x_test[[1]], time_scale = "week", weight = "keep"))
   expect_failure(expect_identical(spd1, spd3))
   expect_identical(ptw1, polls_time_weights(spd3))
 
-  expect_silent(spd4 <- adapop:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week", weight = "skew"))
+  expect_silent(spd4 <- ada:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week", weight = "skew"))
   expect_failure(expect_identical(spd1, spd4))
   expect_silent(ptw4 <- polls_time_weights(spd4))
   expect_failure(expect_identical(ptw1, polls_time_weights(spd4)))
@@ -49,7 +49,7 @@ test_that("reweight and resample works", {
   expect_equal(ptw4_9$weight[1], ptw4_9$weight[2])
   expect_equal(ptw4_9$weight[length(ptw4_9$weight)], ptw4_9$weight[2])
 
-  expect_silent(spd5 <- adapop:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week", weight = "vskew"))
+  expect_silent(spd5 <- ada:::reweight_and_resample(spd1, x_test[[1]], time_scale = "week", weight = "vskew"))
   expect_failure(expect_identical(spd1, spd5))
   expect_silent(ptw5 <- polls_time_weights(spd5))
   expect_failure(expect_identical(ptw1, polls_time_weights(spd5)))
