@@ -48,4 +48,5 @@ jobs:
         run: rcmdcheck::rcmdcheck(path = "rpackage", args = "--no-manual", error_on = "warning")
         shell: Rscript {0}
       - name: Test to run Ada
-        shell: Rscript run_ada/run_ada.R
+        run: Rscript run_ada/run_ada.R
+        shell: bash
