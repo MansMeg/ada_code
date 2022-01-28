@@ -48,6 +48,6 @@ jobs:
       - name: Test to run Ada
         run: |
              Rscript -e "remotes::install_local('rpackage', force = TRUE)"
-             Rscript -e "remotes::install_github("MansMeg/SwedishPolls", subdir = "RPackage")"
+             Rscript -e "remotes::install_github('MansMeg/SwedishPolls', subdir = 'RPackage')"
              Rscript run_ada/run_ada.R
         shell: bash
