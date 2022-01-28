@@ -1,0 +1,37 @@
+job_id: "ada_swedish_model"
+
+data_arguments:
+  dates_model_start: "2002-01-01" # Defaults to 2002-01-01
+#  dates_model_end: # Defaults to two months after today
+#  dates_polls_start: # The earliest date to include polls for. Defaults to dates_model_start
+#  dates_polls_end: # The latest date to include polls for.  Defaults to dates_model_end
+#  dates_known_state_end: # The latest date to include polls for. Defaults to dates_model_end
+
+model_arguments:
+  stan_model: "model8h3"
+  seed: 4713
+  hyper_parameters:
+    g_scale: 4
+    use_industry_bias: 1
+    use_house_bias: 1
+    use_design_effects: 1
+    use_softmax: 1
+    use_constrained_house_house_bias: 1
+    use_constrained_party_house_bias: 1
+    use_constrained_party_kappa: 1
+    use_t_dist_industry_bias: 1
+    use_ar_kappa: 1
+    estimate_alpha_kappa: 1
+    kappa_1_sigma_hyper: 0.05
+    sigma_kappa_hyper: 0.025
+    use_latent_state_version: 0
+    estimate_kappa_next: 0
+    use_multivariate_version: 2
+  stan_arguments:
+    warmup: 1000
+    thin: 1
+    chains: 4
+    control:
+      adapt_delta: 0.9
+      max_treedepth: 12
+
