@@ -18,7 +18,7 @@ To run the models and produce the output:
 
 1. You need to have Stan and Rstan installed. To install Rstan (and Stan), see [Rstan Installation information](https://mc-stan.org/users/interfaces/rstan.html).
 2. Install the SwedishPolls R package. See [the install instructions here]().
-3. Install the ``adapop`` R package (see below). 
+3. Install the ``ada`` R package (see below). 
 4. Run either 
 
 
@@ -42,11 +42,11 @@ devtools::install_local("rpackage")
 
 ### Access polling data
 
-There are two types of data we can access through the `adapop` package. First, we can access real polling data from Sweden (and Spain, and Germany).
+There are two types of data we can access through the `ada` package. First, we can access real polling data from Sweden (and Spain, and Germany).
 
 To access the polls data from the R package, use:
 ```{r}
-library(adapop)
+library(ada)
 data("swedish_polls_curated")
 data("swedish_elections")
 ```
