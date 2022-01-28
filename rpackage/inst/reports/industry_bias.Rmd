@@ -12,9 +12,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 
 
-library(adapop)
+library(ada)
 paths_to_pop_objects <- "[pop_paths]"
-pops <- adapop:::rmd_read_pops(paths_to_pop_objects)
+pops <- ada:::rmd_read_pops(paths_to_pop_objects)
 
 parameter_path <- "[parameter_path]"
 param_default <- c("full_period" = FALSE, 
@@ -25,16 +25,16 @@ param_default <- c("full_period" = FALSE,
                    "model_information" = TRUE,
                    "traceplots" = FALSE,
                    "dev" = "png")
-params <- adapop:::rmd_read_params(parameter_path)
-params <- adapop:::rmd_parse_parameters(params, param_default)
+params <- ada:::rmd_read_params(parameter_path)
+params <- ada:::rmd_parse_parameters(params, param_default)
 
-parties <- adapop:::rmd_pops_unique_parties(pops)
+parties <- ada:::rmd_pops_unique_parties(pops)
 
-mi <- adapop:::rmd_model_settings_with_unique(pops)
+mi <- ada:::rmd_model_settings_with_unique(pops)
 mi <- mi[order(mi$y, mi$polls_time_to, mi$model_setting),]
 mi$model <- mi$i
 
-mu <- adapop:::rmd_model_settings_unique(pops)
+mu <- ada:::rmd_model_settings_unique(pops)
 
 knitr::opts_chunk$set(dev = params$dev)
 ```
@@ -63,7 +63,7 @@ if(params$last_election_period){
     for(j in 1:nrow(mi)){
       cat("\n")
       pop <- pops[[mi$i[j]]]
-      knm <- adapop:::rmd_get_kappa_name(pop)
+      knm <- ada:::rmd_get_kappa_name(pop)
       if(!(party %in% pop$y)) next
       no_kappa <- pop$stan_fit@par_dims[[knm]][1]
       date_idx <- (length(pop$known_state$date) - no_kappa + 2L):length(pop$known_state$date)
@@ -87,7 +87,7 @@ if(params$traceplots){
   for(j in 1:nrow(mi)){
       cat("\n")
       pop <- pops[[mi$i[j]]]
-      knm <- adapop:::rmd_get_kappa_name(pop)
+      knm <- ada:::rmd_get_kappa_name(pop)
       parties <- pop$y
       no_kappa <- pop$stan_fit@par_dims[[knm]][1]
       param <- paste0(knm, "[", no_kappa, ",", seq_along(pop$y), "]")
@@ -138,7 +138,7 @@ if(params$traceplots){
   for(j in 1:nrow(mi)){
       cat("\n")
       pop <- pops[[mi$i[j]]]
-      knm <- adapop:::rmd_get_kappa_name(pop)
+      knm <- ada:::rmd_get_kappa_name(pop)
       parties <- pop$y
       no_kappa <- pop$stan_fit@par_dims[[knm]][1]
       param <- paste0("sigma_kappa[", seq_along(pop$y), "]")
@@ -212,7 +212,7 @@ if(params$last_election_period){
 if(params$diagnostics_table){
   
   cat("## Model diagnostics\n")
-  tab <- adapop:::rmd_model_diagnostic_table(pops)
+  tab <- ada:::rmd_model_diagnostic_table(pops)
   n <- 5
   it <- ncol(tab)%/%n; rest <- ncol(tab)%%n
   if(rest > 0) it <- it + 1L

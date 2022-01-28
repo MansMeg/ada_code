@@ -83,7 +83,7 @@ write_ada_time_series_json <- function(x, output_dir = getwd(), file_name = NULL
               latent_state = lsp3)
 
   if(is.null(file_name)){
-    file_name <- paste0("adapop_ts_", as.Date(out$metadata$written), "_", substr(out$metadata$object_sha,1,6), ".json")
+    file_name <- paste0("ada_ts_", as.Date(out$metadata$written), "_", substr(out$metadata$object_sha,1,6), ".json")
   }
   fp <- file.path(output_dir, file_name)
   jsonlite::write_json(out, path = fp, auto_unbox = TRUE, pretty = TRUE, digits = 4)
@@ -112,7 +112,7 @@ write_ada_latent_posterior_json <- function(x, output_dir = getwd(), file_name =
               latent_state = xls$latent_state)
 
   if(is.null(file_name)){
-    file_name <- paste0("adapop_pd_", as.Date(out$metadata$written), "_", substr(out$metadata$object_sha,1,6), ".json")
+    file_name <- paste0("ada_pd_", as.Date(out$metadata$written), "_", substr(out$metadata$object_sha,1,6), ".json")
   }
   fp <- file.path(output_dir, file_name)
   jsonlite::write_json(out, path = fp, auto_unbox = TRUE, pretty = TRUE, digits = 3)

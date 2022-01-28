@@ -5,7 +5,7 @@
 # options(mc.cores = parallel::detectCores())
 if(FALSE){ # For debugging
   library(testthat)
-  library(adapop)
+  library(ada)
 }
 
 
