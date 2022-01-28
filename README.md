@@ -5,10 +5,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-The Ada model
+A Poll of Polls model
 =====================
 
-This repository contain code to run the Ada Poll of Polls model using
+This repository contains code to run the Ada Poll of Polls model using
 Stan.
 
 To run the models and (re)produce the output:
@@ -28,28 +28,28 @@ To run the models and (re)produce the output:
 The model used
 ==============
 
-We continuously develop the model and improves it. The actual model we
+We continuously develop the model and improve it. The actual model we
 use is set in the
-[run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml)
+[run\_ada/ada\_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml)
 (`model` argument). The same model will exist as a stan file in the R
 package, that you can find in
 [rpackage/inst/stan\_models/](https://github.com/MansMeg/ada_code/blob/main/rpackage/inst/stan_models/).
 
 The hyperparameter settings we use are then either set in the config
 file
-([run\_ada/ada_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml))
+([run\_ada/ada\_config.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_config.yml))
 or as the default values. The default values are printed when running
 the model in R.
 
-Unfortunately we do not have a better description of the model right
+Unfortunately, we do not have a better description of the model right
 now. We know that it can be cumbersome to read, but if you have any
-questions feel free to reach out on twitter or leave an issue
-[here](https://github.com/MansMeg/ada_code/issues) at github.
+questions feel free to reach out on Twitter or leave an issue
+[here](https://github.com/MansMeg/ada_code/issues) at Github.
 
 R package
 =========
 
-All functionality and tests of implemented functionality is implemented
+All functionality and tests of implemented functionality are implemented
 in the R package `ada`.
 
 Installation
@@ -63,9 +63,8 @@ devtools::install_local("rpackage")
 
 ### Access polling data
 
-There are two types of data we can access through the `ada` package.
-First, we can access real polling data from Sweden (and Spain, and
-Germany).
+We can access two types of data through the `ada` package. First, we can
+access real polling data from Sweden (Spain and Germany).
 
 To access the polls data from the R package, use:
 
@@ -75,7 +74,7 @@ data("swedish_polls_curated")
 data("swedish_elections")
 ```
 
-Based on the data we create a polls\_data object.
+Based on the data, we create a polls\_data object.
 
 ``` r
 pd <- polls_data(y = swedish_polls_curated[, 3:10],
@@ -111,17 +110,17 @@ To see all available datasets, use:
 data(package = "ada")
 ```
 
-The real polling data comes both as an original dataset, and a curated
+The real polling data comes both as an original dataset and a curated
 dataset that has been curated to be internally consistent. See
-`rpackage/data-raw` for details exactly on how the curation has been
-conducted. Every file without suffix `_functions` will create the
-datasets stored in the R-package.
+`rpackage/data-raw` for details on how the curation has been conducted.
+Every file without suffix `_functions` will create the datasets stored
+in the R-package.
 
 Documentation on each dataset can be found in the R package docs or in
 `rpackage/R/docs_data.R`.
 
-To simplify modeling we can also simulate polls data. This can be done
-using `simulate_polls()` as follows.
+To simplify modelling, we can also simulate polls data. Simulation can
+be done using `simulate_polls()` as follows.
 
 ``` r
 library(ada)
@@ -142,9 +141,9 @@ plot(spd, y = "x")
 
 ### Accessing true state (election) data
 
-In the next step we add information on where we know the true underlying
-latent state. In the case of real data this is election data (see
-above). Below we create a dataset with week 3, 4, and 72 being known.
+In the next step, we add information on the true underlying latent
+state. In the case of real data, this is election data (see above).
+Below we create a dataset with weeks 3, 4, and 72 known.
 
 ``` r
 true_idx <- c(3, 44, 72)
@@ -161,7 +160,7 @@ known_state
 
 ### Running a poll of polls model
 
-To fit the model we only need use the `poll_of_polls()` function.
+We only need to use the `poll_of_polls()` function to fit the model.
 
 ``` r
 output <- capture.output(suppressWarnings(
@@ -177,14 +176,83 @@ output <- capture.output(suppressWarnings(
 ```
 
     ## Default value(s) set:
+
     ## sigma_kappa_hyper = 0.005
+
     ## kappa_1_sigma_hyper = 0.02
+
     ## g_scale = 0.46986301369863
 
-      ...
+    ## use_industry_bias = 0
+
+    ## use_house_bias = 0
+
+    ## use_design_effects = 0
+
+    ## use_constrained_party_house_bias = 0
+
+    ## use_constrained_house_house_bias = 0
+
+    ## use_constrained_party_kappa = 0
+
+    ## use_ar_kappa = 0
+
+    ## use_latent_state_version = 0
+
+    ## use_t_dist_industry_bias = 0
+
+    ## use_multivariate_version = 0
+
+    ## use_softmax = 1
+
+    ## estimate_alpha_kappa = 0
+
+    ## estimate_alpha_beta_mu = 0
+
+    ## estimate_alpha_beta_sigma = 0
+
+    ## alpha_kappa_known = 1
+
+    ## alpha_beta_mu_known = 1
+
+    ## alpha_beta_sigma_known = 1
+
+    ## beta_mu_1_sigma_hyper = 0.02
+
+    ## sigma_beta_mu_sigma_hyper = 0.01
+
+    ## beta_sigma_1_sigma_hyper = 1
+
+    ## sigma_beta_sigma_sigma_hyper = 1
+
+    ## kappa_sum_sigma_hyper = 0.01
+
+    ## beta_mu_sum_party_sigma_hyper = 0.01
+
+    ## beta_mu_sum_house_sigma_hyper = 0.01
+
+    ## estimate_kappa_next = 1
+
+    ## nu_kappa_raw_alpha = 6.5
+
+    ## nu_kappa_raw_beta = 1
+
+    ## alpha_kappa_mean = 0
+
+    ## alpha_kappa_sd = 1
+
+    ## alpha_beta_mu_mean = 0
+
+    ## alpha_beta_mu_sd = 1
+
+    ## alpha_beta_sigma_mean = 0
+
+    ## alpha_beta_sigma_sd = 1
 
     ## nu_lkj = 1
+
     ## x1_prior_p = 0.268781302170284, 0.731218697829716
+
     ## x1_prior_alpha0 = 100
 
 We can also extract some basic information and the results.
@@ -225,17 +293,17 @@ pop
     ## mean_chain_step_size: 0.0484539
     ## mean_chain_inv_mass_matrix_min: 0.0416008
     ## mean_chain_inv_mass_matrix_max: 1.0767375
-    ## mean_chain_warmup_time: 19
-    ## mean_chain_sampling_time: 22
+    ## mean_chain_warmup_time: 18
+    ## mean_chain_sampling_time: 21
     ## 
     ## == Git == 
-    ## git sha: 05b80248038a271ffb72253a71e8bdcabfff7614 
+    ## git sha: fc74bb2aec2b4e1900f59ee477b131f2384e2882 
     ## 
     ## == Cache == 
     ## sha: 0bc8c0f14ea23e05ef4e65e8fdd28fa462712280 
-    ## cache directory: /var/folders/8x/bgssdq5n6dx1_ydrhq1zgrym0000gn/T//RtmpV15V6A/pop_cache
+    ## cache directory: /var/folders/8x/bgssdq5n6dx1_ydrhq1zgrym0000gn/T//Rtmp8bFLr7/pop_cache
 
-The stan object can be found in `pop$stan_fit`
+We can find the stan object in `pop$stan_fit`
 
 ``` r
 head(rstan::summary(pop$stan_fit)$summary)[,1:3]
@@ -261,14 +329,14 @@ Updating/adding new Stan models
 All Stan Code can be found in `rpackage/inst/stan_models`. The purpose
 is that the stan files should be a part of the rpackage for testing.
 
-Although local stan models can be tested direct by:
+Although local stan models can be tested directly by:
 
     pop <- poll_of_polls(...,
                         model = "path/to/my/stan/model.stan",
                         ...)
 
-In this way a model can be edited quickly without needing to rebuild the
+In this way, we can edit a model quickly without needing to rebuild the
 R package.
 
-Note that the filename need to have the same name as the available
-models to identify how data should be parsed.
+The filename needs to have the same name as the available models to
+identify how the package should parse data.
