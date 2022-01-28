@@ -16,29 +16,35 @@ To run the models and (re)produce the output:
 1.  You need to have Stan and Rstan installed. To install Rstan (and
     Stan), see [Rstan Installation
     information](https://mc-stan.org/users/interfaces/rstan.html).
-2.  Install the SwedishPolls R package. See [the install instructions
-    here]().
+2.  Install the SwedishPolls R package. See the install instructions
+    [here](https://github.com/MansMeg/SwedishPolls).
 3.  Install the `ada` R package (see below).
-4.  Run either [run\_ada/run\_ada.R]() in R or
-    [run\_ada/run\_ad\_bash.sh]().
+4.  Run either
+    [run\_ada/run\_ada.R](https://github.com/MansMeg/ada_code/blob/main/run_ada/run_ada.R)
+    in R or
+    [run\_ada/run\_ad\_bash.sh](https://github.com/MansMeg/ada_code/blob/main/run_ada/run_ada_bash.sh).
 5.  Play around with the resulting model object in R.
 
 The model used
 ==============
 
 We continuously develop the model and improves it. The actual model we
-use is set in the [run\_ada/ada\_cfg.yml]() (`model` argument). The same
-model will exist as a stan file in the R package, that you can find in
-[rpackage/inst/stan\_models/]().
+use is set in the
+[run\_ada/ada\_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml)
+(`model` argument). The same model will exist as a stan file in the R
+package, that you can find in
+[rpackage/inst/stan\_models/](https://github.com/MansMeg/ada_code/blob/main/rpackage/inst/stan_models/).
 
 The hyperparameter settings we use are then either set in the config
-file ([run\_ada/ada\_cfg.yml]()) or as the default values. The default
-values are printed when running the model.
+file
+([run\_ada/ada\_cfg.yml](https://github.com/MansMeg/ada_code/blob/main/run_ada/ada_cfg.yml))
+or as the default values. The default values are printed when running
+the model in R.
 
 Unfortunately we do not have a better description of the model right
 now. We know that it can be cumbersome to read, but if you have any
-questions feel free to reach out on twitter or leave an issue [here]()
-at github.
+questions feel free to reach out on twitter or leave an issue
+[here](https://github.com/MansMeg/ada_code/issues) at github.
 
 R package
 =========
@@ -302,14 +308,14 @@ pop
     ## mean_chain_inv_mass_matrix_min: 0.0416008
     ## mean_chain_inv_mass_matrix_max: 1.0767375
     ## mean_chain_warmup_time: 19
-    ## mean_chain_sampling_time: 21
+    ## mean_chain_sampling_time: 22
     ## 
     ## == Git == 
-    ## git sha: c509cb91de746c0b7ea3d781ee7e65f94958b9c3 
+    ## git sha: 05b80248038a271ffb72253a71e8bdcabfff7614 
     ## 
     ## == Cache == 
     ## sha: 0bc8c0f14ea23e05ef4e65e8fdd28fa462712280 
-    ## cache directory: /var/folders/8x/bgssdq5n6dx1_ydrhq1zgrym0000gn/T//RtmpAmnxQr/pop_cache
+    ## cache directory: /var/folders/8x/bgssdq5n6dx1_ydrhq1zgrym0000gn/T//RtmpV15V6A/pop_cache
 
 The stan object can be found in `pop5$stan_fit`
 
@@ -337,71 +343,14 @@ Updating/adding new Stan models
 All Stan Code can be found in `rpackage/inst/stan_models`. The purpose
 is that the stan files should be a part of the rpackage for testing.
 
-Although local stan\_models can be tested direct by:
+Although local stan models can be tested direct by:
 
-    pop5 <- poll_of_polls(...,
-                          model = "path/to/my/stan/model.stan",
-                          ...)
+    pop <- poll_of_polls(...,
+                        model = "path/to/my/stan/model.stan",
+                        ...)
 
 In this way a model can be edited quickly without needing to rebuild the
 R package.
 
 Note that the filename need to have the same name as the available
 models to identify how data should be parsed.
-
-Detailed information on the different Stan models can be found
-[here](https://github.com/MansMeg/ada_pop/tree/master/rpackage/inst/stan_models).
-
-### R code to add for the model
-
-Start by adding the model the function in `stan_polls_data` in the file
-`stan_data.R`, So that is in the if loop (something we should remove
-messy to add code that way?)
-
-     if(model %in% c("model2","model3","model4","model5","model6","model6b", "model6c","model7","model9")){ #ADD NEW MODEL HERE
-
-If one needs to include new data that does not fit any of the previous
-models create a new function branch `stan_polls_data_modelnew` in
-`stan_polls_data_model.R`, otherwise just add it as follows:
-
-    #' @rdname stan_polls_data_model
-    #' @export
-    stan_polls_data_model.modelnew <- stan_polls_data_model.model2
-
-The same procedure should be done with `assert_stan_data_model` that
-checks the data of the model has the right properties.
-
-### R code for storing of stan output
-
-In the file `poll_of_polls.R` update the function
-`stan_parameters_to_store` to include the variables to keep.
-
-### Testing and developing new Stan models
-
-Test structures to check different parts of the models can be found in
-`rpackage/tests/testthat/model*.R`. These test scripts is made to
-simplify development by supplying test models and data.
-
-Real Data Experiments
-=====================
-
-The experiment on real data consists of two steps. (1) First we run
-models through bash, and then (2) we create a model report for the given
-models.
-
-(1) Running the models from bash
---------------------------------
-
-See `bash_runs` folder.
-
-The `run_model3.R` is the R script that runs the model and
-`model_runs/modelX.sh` is the bash script used to run a model. Helper
-scripts can be found in `bash_scripts`.
-
-(2) Write Model Reports
------------------------
-
-The bash scripts output model files (in `model_output`).
-
-In the folder `rmd_reports`, the different model reports are contained.
-Use the latest version of the model reports.
