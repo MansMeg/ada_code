@@ -40,6 +40,10 @@ jobs:
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(pkgdir = "rpackage", dependencies = TRUE)
         shell: Rscript {0}
+      - name: Install SwedishPolls
+        run: |
+          remotes::install_github("MansMeg/SwedishPolls", subdir = "RPackage")
+        shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(path = "rpackage", args = "--no-manual", error_on = "warning")
         shell: Rscript {0}
