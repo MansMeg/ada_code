@@ -1,4 +1,4 @@
-Package: ada
+Package: adapop
 Title: Ada Poll of Polls
 Version: 0.4.0
 Authors@R: 
@@ -10,7 +10,7 @@ Description: Functionality for Ada Poll of Polls.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: R (>= 3.5.0)
 Imports:
   checkmate,

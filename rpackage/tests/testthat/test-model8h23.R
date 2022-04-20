@@ -2,18 +2,18 @@ context("model8h")
 
 # Run the line below to run different test suites locally
 # See documentation for details.
-# ada:::set_test_stan_basic_on_local(TRUE)
-# ada:::set_test_stan_full_on_local(TRUE)
+# adapop:::set_test_stan_basic_on_local(TRUE)
+# adapop:::set_test_stan_full_on_local(TRUE)
 # options(mc.cores = parallel::detectCores())
 if(FALSE){ # For debugging
   library(testthat)
-  library(ada)
+  library(adapop)
 }
 
 
 test_that("Test model 8h2 and 8h3", {
   # First we test that we get a similar result with 8g and 8g1
-  skip_if_not(ada:::test_stan_basic_on_local() | ada:::test_stan_full_on_local() | ada:::on_github_actions())
+  skip_if_not(adapop:::test_stan_basic_on_local() | adapop:::test_stan_full_on_local() | adapop:::on_github_actions())
 
   data("x_test")
   txdf <- as.data.frame(x_test[3:4])
@@ -147,7 +147,7 @@ test_that("Test model 8h2 and 8h3", {
 
 test_that("Test to run model 8h3", {
   # First we test that we get a similar result with 8g and 8g1
-  skip_if_not(ada:::test_stan_basic_on_local() | ada:::test_stan_full_on_local() | ada:::on_github_actions())
+  skip_if_not(adapop:::test_stan_basic_on_local() | adapop:::test_stan_full_on_local() | adapop:::on_github_actions())
   skip("Takes too long time to do. Mainly used for manual inspection.")
 
   data("x_test")

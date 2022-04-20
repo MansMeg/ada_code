@@ -10,9 +10,9 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(ada)
+library(adapop)
 paths_to_pop_objects <- "[pop_paths]"
-pops <- ada:::rmd_read_pops(paths_to_pop_objects)
+pops <- adapop:::rmd_read_pops(paths_to_pop_objects)
 
 parameter_path <- "[parameter_path]"
 param_default <- c("full_period" = FALSE, 
@@ -21,16 +21,16 @@ param_default <- c("full_period" = FALSE,
                    "election_campaigns" = FALSE,
                    "diagnostics_table" = TRUE,
                    "model_information" = TRUE)
-params <- ada:::rmd_read_params(parameter_path)
-params <- ada:::rmd_parse_parameters(params, param_default)
+params <- adapop:::rmd_read_params(parameter_path)
+params <- adapop:::rmd_parse_parameters(params, param_default)
 
-parties <- ada:::rmd_pops_unique_parties(pops)
+parties <- adapop:::rmd_pops_unique_parties(pops)
 
-mi <- ada:::rmd_model_settings_with_unique(pops)
+mi <- adapop:::rmd_model_settings_with_unique(pops)
 mi <- mi[order(mi$y, mi$polls_time_to, mi$model_setting),]
 mi$model <- mi$i
 
-mu <- ada:::rmd_model_settings_unique(pops)
+mu <- adapop:::rmd_model_settings_unique(pops)
 
 ```
 
@@ -54,9 +54,9 @@ if(params$diagnostics_table){
     
   cat("\n## Model calibration \n")
   
-  per <- ada:::rmd_last_known_state_percentile(pops)
+  per <- adapop:::rmd_last_known_state_percentile(pops)
   per$ndraws <- NULL
-  nmi <- ada:::rmd_model_settings_with_unique(pops)
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
   per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
   model_settings <- sort(unique(per$model_setting))
   
@@ -91,8 +91,8 @@ if(params$diagnostics_table){
 if(params$diagnostics_table){
     
   cat("\n## Model performance\n")
-  rmse_res <- ada:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "rmse")
-  elpd_res <- ada:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "elpd")
+  rmse_res <- adapop:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "rmse")
+  elpd_res <- adapop:::rmd_last_known_state_evaluation_by_model_setting(pops, type = "elpd")
   res <- cbind(rmse_res[,c("model_setting", "rmse")], elpd_res[,c("elpd", "n")])
   print(knitr::kable(res, 
                      digits = 3, 
@@ -105,14 +105,14 @@ if(params$diagnostics_table){
 if(params$diagnostics_table){
     
   cat("\n## RMSE by Country\n")
-  nmi <- ada:::rmd_model_settings_with_unique(pops)
-  per <- ada:::rmd_last_known_state_evaluation(pops, type = "rmse")
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_evaluation(pops, type = "rmse")
   per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
   per <- per[order(per$polls_time_to, per$model_setting),]
   
   # Germany
   party <- "SPD" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_germany) > 0){
     print(knitr::kable(per_germany, 
@@ -123,7 +123,7 @@ if(params$diagnostics_table){
   
   # Sweden
   party <- "M" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_swe) > 0){
     print(knitr::kable(per_swe, 
@@ -139,14 +139,14 @@ if(params$diagnostics_table){
 if(params$diagnostics_table){
     
   cat("\n## ELDP by Country\n")
-  nmi <- ada:::rmd_model_settings_with_unique(pops)
-  per <- ada:::rmd_last_known_state_evaluation(pops, type = "elpd")
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_evaluation(pops, type = "elpd")
   per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
   per <- per[order(per$polls_time_to, per$model_setting),]
   
   # Germany
   party <- "SPD" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_germany) > 0){
     print(knitr::kable(per_germany, 
@@ -157,7 +157,7 @@ if(params$diagnostics_table){
   
   # Sweden
   party <- "M" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_swe) > 0){
     print(knitr::kable(per_swe, 
@@ -174,14 +174,14 @@ if(params$diagnostics_table){
 if(params$diagnostics_table){
     
   cat("\n## Percentiles by Country\n")
-  nmi <- ada:::rmd_model_settings_with_unique(pops)
-  per <- ada:::rmd_last_known_state_percentile(pops)
+  nmi <- adapop:::rmd_model_settings_with_unique(pops)
+  per <- adapop:::rmd_last_known_state_percentile(pops)
   per <- merge(per, nmi[, c("sha", "model_setting", "polls_time_to")])
   per <- per[order(per$polls_time_to, per$model_setting),]
   
   # Germany
   party <- "SPD" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_germany <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_germany) > 0){
     print(knitr::kable(per_germany, 
@@ -192,7 +192,7 @@ if(params$diagnostics_table){
   
   # Sweden
   party <- "M" 
-  pnm <- make.names(ada:::rmd_get_other_parties_in_known_state(party))
+  pnm <- make.names(adapop:::rmd_get_other_parties_in_known_state(party))
   per_swe <- per[!is.na(per[[party]]), c("polls_time_to", "model_setting", "sha", "ndraws", pnm[pnm%in%colnames(per)])]
   if(nrow(per_swe) > 0){
     print(knitr::kable(per_swe, 
@@ -224,7 +224,7 @@ if(params$last_election_period){
                   shift_latent_days = 6L,
                   from = unname(pop$model_time_range["to"] - 150),
                   to = unname(pop$model_time_range["to"]),
-                  latent_state_colour = ada:::party_color(party)) + 
+                  latent_state_colour = adapop:::party_color(party)) + 
         geom_known_state(ks, party) + 
         ggplot2::theme_bw()
       tit <- paste0("From ", mi$polls_time_to[j], ": Setting ", mi$model_setting[j], " (model ", mi$i[j], ") ")
@@ -246,7 +246,7 @@ if(params$last_election_period){
 if(params$diagnostics_table){
   
   cat("## Model diagnostics\n")
-  tab <- ada:::rmd_model_diagnostic_table(pops)
+  tab <- adapop:::rmd_model_diagnostic_table(pops)
   n <- 5
   it <- ncol(tab)%/%n; rest <- ncol(tab)%%n
   if(rest > 0) it <- it + 1L

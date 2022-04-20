@@ -53,7 +53,7 @@ pls[[7]] <- get_wikipedia_spanish_polls_data(wiki_url, xpath = wiki_table_xpath,
 
 
 spanish_polls <- dplyr::bind_rows(pls)
-spanish_polls$PublYearMonth <- paste0(lubridate::year(spanish_polls$to), "-", tolower(ada:::month_abbr_en())[lubridate::month(spanish_polls$to)])
+spanish_polls$PublYearMonth <- paste0(lubridate::year(spanish_polls$to), "-", tolower(adapop:::month_abbr_en())[lubridate::month(spanish_polls$to)])
 spanish_polls$Company <- as.factor(spanish_polls$house)
 
 spanish_polls$Uncertain <- NA

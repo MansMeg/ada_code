@@ -66,7 +66,7 @@ poll_of_polls <- function(y,
   }
 
   # SHA is setup both of all
-  fun_args <- names(formals(ada::poll_of_polls))[-which(names(formals(poll_of_polls)) %in% c("...", "cache_dir"))]
+  fun_args <- names(formals(adapop::poll_of_polls))[-which(names(formals(poll_of_polls)) %in% c("...", "cache_dir"))]
   sha_fun_args <- list(y = y,
                        model = readLines(smfp),
                        polls_data = polls_data,

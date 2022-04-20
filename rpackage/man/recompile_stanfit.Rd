@@ -13,5 +13,5 @@ recompile_stanfit(x)
 a recompiled [stanfit] object based on the model and data of the [poll_of_polls] object
 }
 \description{
-The function takes a [poll_of_polls] object and recomplie the code an the data
+The function takes a [poll_of_polls] object and recompile the code an the data
 }
