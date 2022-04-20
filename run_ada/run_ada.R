@@ -1,4 +1,4 @@
-library(ada)
+library(adapop)
 library(rstan)
 library(SwedishPolls)
 
@@ -54,7 +54,7 @@ options(mc.cores = parallel::detectCores())
 
 ## Set stan arguments
 print("Set stan arguments")
-if(!ada:::on_github_actions()){
+if(!adapop:::on_github_actions()){
   total_posterior_draws <- 1000L
   stan_arguments <- cfg$model_arguments$stan_arguments
   if(is.null(stan_arguments)){

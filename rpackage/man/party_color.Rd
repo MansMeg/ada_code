@@ -2,13 +2,13 @@
 % Please edit documentation in R/party_color.R
 \name{party_color}
 \alias{party_color}
-\title{Get the party color for a given party abbrivation}
+\title{Get the party color for a given party abbreviation}
 \usage{
 party_color(x)
 }
 \arguments{
-\item{x}{a party abbrivation}
+\item{x}{a party abbreviation}
 }
 \description{
-Get the party color for a given party abbrivation
+Get the party color for a given party abbreviation
 }

@@ -4,7 +4,7 @@ source("data-raw/german_polls_elections_functions.R")
 german_polls <- get_german_polls_data()
 
 # Get all in same format/colnames
-german_polls$PublYearMonth <- paste0(lubridate::year(german_polls$Datum), "-", tolower(ada:::month_abbr_en())[lubridate::month(german_polls$Datum)])
+german_polls$PublYearMonth <- paste0(lubridate::year(german_polls$Datum), "-", tolower(adapop:::month_abbr_en())[lubridate::month(german_polls$Datum)])
 german_polls$Company <-  as.factor(german_polls$Institut)
 german_polls$Uncertain <- german_polls$`Nichtwähler/Unentschl.`
 german_polls$n <- as.integer(german_polls$Befragte)

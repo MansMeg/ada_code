@@ -56,7 +56,7 @@ write_uppmax_bash <- function(args, directory, model_config, stan_arguments, sta
   }
   if(!is.null(model_config)){
     model_config <- model_config[!unlist(lapply(model_config, is.na))]
-    suppressMessages(ada::model_config(args$stan_model, x = model_config))
+    suppressMessages(adapop::model_config(args$stan_model, x = model_config))
     mc <- yaml::as.yaml(model_config)
     mc <- gsub(pattern = "\n", replacement = "\n    ", mc)
     mc <- paste0("hyper_parameters:\n    ",mc)

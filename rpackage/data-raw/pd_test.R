@@ -1,4 +1,4 @@
-library(ada)
+library(adapop)
 data("swe_polls")
 pd <- polls_data(y = swe_polls[,3:11]/100,
                  house = swe_polls$Company,

@@ -1,6 +1,6 @@
-#' Get the party color for a given party abbrivation
+#' Get the party color for a given party abbreviation
 #'
-#' @param x a party abbrivation
+#' @param x a party abbreviation
 party_color <- function(x){
   checkmate::assert_string(x)
   # Taken from: https://sv.wikipedia.org/wiki/Mall:Partif%C3%A4rg
